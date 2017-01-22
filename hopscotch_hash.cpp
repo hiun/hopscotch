@@ -63,16 +63,16 @@ void hopscotchUnorderedIntSetCreate( HopscotchUnorderedIntSet *s,
 
   //ALLOCATE THE SEGMENTS ...................
 #ifdef CONCURRENT_HOPSCOTCH
-  s->segments = (HopscotchSegment *)malloc(sizeof(HopscotchSegment)*(s->segmentMask + 1));
+  s->segments = (HopscotchSegment *)hbw_malloc(sizeof(HopscotchSegment)*(s->segmentMask + 1));
   for (i = 0; i <= s->segmentMask; ++i)
   {
     initSegment(&s->segments[i]);
   }
 #endif
 
-  s->hopInfo = (unsigned int *)malloc(sizeof(unsigned int)*num_buckets);
-  s->key = (int *)malloc(sizeof(int)*num_buckets);
-  s->hash = (int *)malloc(sizeof(int)*num_buckets);
+  s->hopInfo = (unsigned int *)hbw_malloc(sizeof(unsigned int)*num_buckets);
+  s->key = (int *)hbw_malloc(sizeof(int)*num_buckets);
+  s->hash = (int *)hbw_malloc(sizeof(int)*num_buckets);
 
 #ifdef CONCURRENT_HOPSCOTCH
 #pragma omp parallel for if(!omp_in_parallel())
@@ -103,14 +103,14 @@ void hopscotchUnorderedIntMapCreate( HopscotchUnorderedIntMap *m,
 
   //ALLOCATE THE SEGMENTS ...................
 #ifdef CONCURRENT_HOPSCOTCH
-  m->segments = (HopscotchSegment *)malloc(sizeof(HopscotchSegment)*(m->segmentMask + 1));
+  m->segments = (HopscotchSegment *)hbw_malloc(sizeof(HopscotchSegment)*(m->segmentMask + 1));
   for (i = 0; i <= m->segmentMask; i++)
   {
     initSegment(&m->segments[i]);
   }
 #endif
 
-  m->table = (HopscotchBucket *)malloc(sizeof(HopscotchBucket)*num_buckets);
+  m->table = (HopscotchBucket *)hbw_malloc(sizeof(HopscotchBucket)*num_buckets);
 
 #ifdef CONCURRENT_HOPSCOTCH
 #pragma omp parallel for
@@ -201,7 +201,7 @@ int *hopscotchUnorderedIntSetCopyToArray( HopscotchUnorderedIntSet *s, int *len 
 #pragma omp master
 #endif
     {
-      ret_array = (int *)malloc(sizeof(int)*(*len));
+      ret_array = (int *)hbw_malloc(sizeof(int)*(*len));
     }
 #ifdef CONCURRENT_HOPSCOTCH
 #pragma omp barrier
